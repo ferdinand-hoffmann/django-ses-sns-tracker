@@ -8,7 +8,7 @@ name: Create release and attach sdist
 
 jobs:
   build:
-    name: Upload Release Asset
+    name: Build sdist and create release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -35,7 +35,7 @@ jobs:
           from setuptools.config import read_configuration
           package_version = read_configuration('setup.cfg')['metadata']['version']
           if parse(package_version) != parse('${{ steps.get_version.outputs.VERSION }}'):
-            print('version mismatch')
+            print(f'version mismatch: {package_version} (package) vs ${{ steps.get_version.outputs.VERSION }} (tag)')
             exit(1)        
       - name: Create Release
         id: create_release
