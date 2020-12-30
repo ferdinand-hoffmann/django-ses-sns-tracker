@@ -27,15 +27,14 @@ jobs:
       - name: Get version from tag
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
-      - name: Checl pacakge version (compare package version with tag)
+      - name: Check package version (compare package version with tag)
         id: check_package_version
         shell: python
         run: |
           from packaging.version import parse
           from setuptools.config import read_configuration
           package_version = read_configuration('setup.cfg')['metadata']['version']
-          tag_version = ${{ steps.get_version.outputs.VERSION }}
-          if parse(package_version) != parse(tag_version):
+          if parse(package_version) != parse('${{ steps.get_version.outputs.VERSION }}'):
             print('version mismatch')
             exit(1)        
       - name: Create Release
